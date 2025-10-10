@@ -1,0 +1,120 @@
+{
+  "timestamp": "2025-10-10T16:08:37.628478",
+  "test_image": "test_images/product_to_verify.jpg",
+  "expected_markings": {
+    "part_number": "SN74LS266N",
+    "manufacturer": "HLF",
+    "date_code": "20A1"
+  },
+  "detected_markings": {
+    "part_number": null,
+    "manufacturer_mark": null,
+    "date_code": null
+  },
+  "verification_results": {
+    "part_number_match": false,
+    "manufacturer_match": false,
+    "date_code_match": false,
+    "overall_authentic": false
+  },
+  "final_verdict": "COUNTERFEIT/UNVERIFIED",
+  "ocr_raw_text": "team 2 Pe be GRE TS SSS EARN HE Bast AS ee ER Dos Rae ree Ra\ne Bi Sang ei a aide Fe ar sete ey ak eA NC ltd Sofie NL tO tan SEY SS ts\nogee oe ee Se oye. ace us\nSRE UN. Oa ae Does\nASRS? ET ope 8s SC Ea ae os ee agg pe ae eS\n. =o = ou INA SL SZ OON Be ge Ry Ha\nee cat i wy er \u00ae I3A8 ecu ss Cas\naie ON ini ee ee age el ees kas\nwee ae, ee | \u2014 a, \u2014 = _ en = psy = eee Lee se\nRe: op a | ree a eee WO especen) ps cag AYE Rea ee\nwo oe Sag EA OI Bre oes GUS eee aes :\n0 eae ents By ee Bee arg 1 My PRON oy Vue fi ee ee Sees oe\nSptiigs sacs! OTs Pim eens 0 2s Gs Sigua ero ion oS 2 ane ete as a eae\nhic eae ae ae pot tge Re Phe FES en OS Ae RL ie IN ey Sa) Ss\nBae Fa BA 0 ea yk era NO Lae ee nett te,\nBe plat, ie a 2 \u2018ae ca i Bags Cg aaa ASS 2 See me ey Se het Stee\nOI UR aCe ERI Oued neg ats VER Wa Eo ae",
+  "full_pipeline_report": {
+    "timestamp": "2025-10-10T16:08:37.628478",
+    "verdict": "COUNTERFEIT",
+    "pipeline_results": [
+      {
+        "step": "1. Logo Detection",
+        "status": "SKIPPED",
+        "confidence": 0.0,
+        "details": {
+          "message": "No logo template provided"
+        },
+        "timestamp": "2025-10-10T16:08:35.937417"
+      },
+      {
+        "step": "2. Text Area + OCR",
+        "status": "FAIL",
+        "confidence": 0.0,
+        "details": {
+          "text_areas_found": 447,
+          "ocr_text": "team 2 Pe be GRE TS SSS EARN HE Bast AS ee ER Dos Rae ree Ra\ne Bi Sang ei a aide Fe ar sete ey ak eA NC ltd Sofie NL tO tan SEY SS ts\nogee oe ee Se oye. ace us\nSRE UN. Oa ae Does\nASRS? ET ope 8s SC Ea ae os ee agg pe ae eS\n. =o = ou INA SL SZ OON Be ge Ry Ha\nee cat i wy er \u00ae I3A8 ecu ss Cas\naie ON ini ee ee age el ees kas\nwee ae, ee | \u2014 a, \u2014 = _ en = psy = eee Lee se\nRe: op a | ree a eee WO especen) ps cag AYE Rea ee\nwo oe Sag EA OI Bre oes GUS eee aes :\n0 eae ents By ee Bee arg 1 My PRON oy Vue fi ee ee Sees oe\nSptiigs sacs! OTs Pim eens 0 2s Gs Sigua ero ion oS 2 ane ete as a eae\nhic eae ae ae pot tge Re Phe FES en OS Ae RL ie IN ey Sa) Ss\nBae Fa BA 0 ea yk era NO Lae ee nett te,\nBe plat, ie a 2 \u2018ae ca i Bags Cg aaa ASS 2 See me ey Se het Stee\nOI UR aCe ERI Oued neg ats VER Wa Eo ae",
+          "expected_text": "SN74LS266N",
+          "method": "threshold + findContours + pytesseract"
+        },
+        "timestamp": "2025-10-10T16:08:37.356573"
+      },
+      {
+        "step": "3. QR/DMC Detection",
+        "status": "SKIPPED",
+        "confidence": 1.0,
+        "details": {
+          "message": "No QR/DMC code detected (skipping check)"
+        },
+        "timestamp": "2025-10-10T16:08:37.421237"
+      },
+      {
+        "step": "4. Defect Detection",
+        "status": "SKIPPED",
+        "confidence": 1.0,
+        "details": {
+          "message": "No golden image provided"
+        },
+        "timestamp": "2025-10-10T16:08:37.421564"
+      },
+      {
+        "step": "5. Angle/Edge Alignment",
+        "status": "FAIL",
+        "confidence": 0.8440225656950405,
+        "details": {
+          "lines_detected": 963,
+          "corners_detected": 100,
+          "avg_angle_deviation": 7.0189845437231755,
+          "method": "Canny + HoughLinesP + goodFeaturesToTrack"
+        },
+        "timestamp": "2025-10-10T16:08:37.525481"
+      },
+      {
+        "step": "6. Color Calibration",
+        "status": "PASS",
+        "confidence": 1.0,
+        "details": {
+          "avg_color_bgr": [
+            136,
+            136,
+            136
+          ],
+          "avg_color_lab": [
+            136,
+            127,
+            127
+          ],
+          "color_difference": 0.0,
+          "method": "LAB hist + compareHist"
+        },
+        "timestamp": "2025-10-10T16:08:37.628478"
+      },
+      {
+        "step": "7. Counterfeit Check",
+        "status": "FAIL",
+        "confidence": 0.6146741885650134,
+        "details": {
+          "verdict": "COUNTERFEIT",
+          "passed_checks": 1,
+          "failed_checks": 2,
+          "total_checks": 3,
+          "critical_failed": false,
+          "method": "SSIM + absdiff"
+        },
+        "timestamp": "2025-10-10T16:08:37.628478"
+      }
+    ],
+    "summary": {
+      "total_checks": 4,
+      "passed": 1,
+      "failed": 3,
+      "skipped": 3,
+      "errors": 0
+    }
+  }
+}
