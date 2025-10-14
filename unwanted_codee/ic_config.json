@@ -1,0 +1,13 @@
+{
+  "part_number": "SN74LS266N",
+  "manufacturer": "HLF",
+  "date_code": null,
+  "use_manual_config": true,
+  "description": "Manual IC Configuration - Entered by user",
+  "notes": [
+    "This configuration was created manually because OCR failed",
+    "part_number: CRITICAL - Must match exactly",
+    "manufacturer: Optional but recommended",
+    "date_code: Set to null to accept any date code (recommended)"
+  ]
+}

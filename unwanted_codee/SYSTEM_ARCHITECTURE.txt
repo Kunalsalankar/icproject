@@ -1,0 +1,456 @@
+================================================================================
+COMPLETE SYSTEM ARCHITECTURE - IC COUNTERFEIT DETECTION SYSTEM
+================================================================================
+
+                        IC COUNTERFEIT DETECTION SYSTEM
+                     COMPLETE ARCHITECTURE & DATA FLOW DIAGRAM
+
+================================================================================
+                            HIGH-LEVEL OVERVIEW
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         INPUT LAYER                                      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐              │
+│  │  Test IC     │    │  Reference   │    │  Config      │              │
+│  │  Image       │    │  IC Image    │    │  Files       │              │
+│  │  (.jpg/.png) │    │  (Golden)    │    │  (.json)     │              │
+│  └──────┬───────┘    └──────┬───────┘    └──────┬───────┘              │
+│         │                   │                    │                       │
+└─────────┼───────────────────┼────────────────────┼───────────────────────┘
+          │                   │                    │
+          ▼                   ▼                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      PREPROCESSING LAYER                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  IMAGE PREPROCESSING PIPELINE:                                           │
+│                                                                           │
+│  1. Load Image (cv2.imread)                                              │
+│     │                                                                     │
+│  2. ROI Cropping (Optional) - crop_roi()                                 │
+│     │  • Crop to IC marking area                                         │
+│     │  • Reduces processing time                                         │
+│     │                                                                     │
+│  3. Downscaling - downscale_image()                                      │
+│     │  • Target height: 400px                                            │
+│     │  • Maintains aspect ratio                                          │
+│     │  • 2-5x speedup                                                    │
+│     │                                                                     │
+│  4. Quality Assessment - assess_image_quality()                          │
+│     │  • Check contrast (std deviation)                                  │
+│     │  • Check sharpness (Laplacian variance)                            │
+│     │  • Decide if enhancement needed                                    │
+│     │                                                                     │
+│  5. Color Conversion (cv2.cvtColor)                                      │
+│     │  • BGR → Grayscale                                                 │
+│     │                                                                     │
+│  6. Conditional Enhancement                                              │
+│     │                                                                     │
+│     ├─► IF Quality Good:                                                 │
+│     │   • Basic Otsu thresholding                                        │
+│     │   • Fast path (skip heavy processing)                              │
+│     │                                                                     │
+│     └─► IF Quality Poor:                                                 │
+│         • CLAHE (Contrast enhancement)                                   │
+│         • Bilateral Filter (noise reduction)                             │
+│         • Sharpening (kernel filter)                                     │
+│         • Multiple thresholding methods                                  │
+│                                                                           │
+│  7. Generate Multiple Variants                                           │
+│     • Enhanced image                                                     │
+│     • Bilateral filtered                                                 │
+│     • Otsu threshold                                                     │
+│     • Inverted Otsu                                                      │
+│     • Adaptive threshold                                                 │
+│     • Inverted adaptive                                                  │
+│     • Manual threshold                                                   │
+│     • Inverted manual                                                    │
+│                                                                           │
+└───────────────────────────────────────┬───────────────────────────────────┘
+                                        │
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      OCR PROCESSING LAYER                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  TESSERACT OCR PIPELINE:                                                 │
+│                                                                           │
+│  For Each Preprocessed Image Variant:                                    │
+│                                                                           │
+│    1. PSM Mode Selection                                                 │
+│       • PSM 6:  Uniform block of text                                    │
+│       • PSM 7:  Single text line                                         │
+│       • PSM 11: Sparse text (best for ICs)                               │
+│       • PSM 12: Sparse text with OSD                                     │
+│       • PSM 13: Raw line                                                 │
+│                                                                           │
+│    2. Character Whitelist Configuration                                  │
+│       • Allowed: A-Z, 0-9 only                                           │
+│       • Reduces OCR errors                                               │
+│                                                                           │
+│    3. pytesseract.image_to_string()                                      │
+│       • Extract text from image                                          │
+│                                                                           │
+│    4. OCR Error Correction                                               │
+│       • O → 0 (letter O to zero)                                         │
+│       • I/l → 1 (letter I/l to one)                                      │
+│       • Z → 2 (letter Z to two)                                          │
+│       • COON → C00N (double O to zeros)                                  │
+│                                                                           │
+│    5. Early Exit Check (Optional)                                        │
+│       • If confident match found (>8 chars)                              │
+│       • Stop processing, return result                                   │
+│                                                                           │
+│  Output: [ All OCR Results ]                                             │
+│                                                                           │
+└───────────────────────────────────────┬───────────────────────────────────┘
+                                        │
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    TEXT ANALYSIS LAYER                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  IC MARKING EXTRACTION - analyze_ic_markings(ocr_texts)                  │
+│                                                                           │
+│  1. Extract Part Number                                                  │
+│     ├─► Pattern: r'SN74[A-Z]{0,4}\d{2,3}[A-Z]{0,2}'                    │
+│     ├─► Example: SN74LS266N, SN74HC00N                                  │
+│     └─► Fragment Assembly (if broken text)                              │
+│         • Find "SN" + "74" + "HC/LS" + digits + "N"                     │
+│         • Handle "HCO" → "HC" + "0"                                      │
+│         • Assemble: SN74HC02N                                            │
+│                                                                           │
+│  2. Extract Manufacturer Mark                                            │
+│     ├─► Pattern: HLF, HL, TI, etc.                                      │
+│     └─► Example: HLF                                                     │
+│                                                                           │
+│  3. Extract Date/Batch Code                                              │
+│     ├─► Pattern: r'\d{2}[A-Z]\d'                                        │
+│     ├─► Pattern: r'\d{2}[A-Z]{3,5}\d{1,2}[A-Z]?\d?'                    │
+│     └─► Example: 20A1, 24ARSS8E4                                        │
+│                                                                           │
+│  Output:                                                                 │
+│  {                                                                        │
+│    'part_number': 'SN74LS266N',                                         │
+│    'manufacturer_mark': 'HLF',                                          │
+│    'date_code': '20A1'                                                  │
+│  }                                                                        │
+│                                                                           │
+└───────────────────────────────────────┬───────────────────────────────────┘
+                                        │
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│              COUNTERFEIT DETECTION AGENT (7-STEP PIPELINE)               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  STEP 1: LOGO DETECTION                                                  │
+│  ├─ Method 1: Template Matching (cv2.matchTemplate)                     │
+│  ├─ Method 2: Feature Matching (ORB + BFMatcher)                        │
+│  ├─ Combined Score = (template_score + feature_score) / 2               │
+│  └─ Threshold: 0.7 | Status: PASS / FAIL                                │
+│                                                                           │
+│  STEP 2: TEXT AREA + OCR                                                 │
+│  ├─ Preprocess: Grayscale + Otsu thresholding                           │
+│  ├─ Find Text Areas: cv2.findContours()                                 │
+│  ├─ OCR: pytesseract.image_to_string(--psm 6)                           │
+│  ├─ Verify: Compare with expected text                                  │
+│  └─ Threshold: 0.7 similarity | Status: PASS / FAIL                     │
+│                                                                           │
+│  STEP 3: QR/DMC DETECTION                                                │
+│  ├─ Method 1: pyzbar.decode() (Primary)                                 │
+│  ├─ Method 2: cv2.QRCodeDetector() (Fallback)                           │
+│  ├─ Verify: Compare decoded data with expected                          │
+│  └─ Status: PASS / FAIL / SKIPPED                                       │
+│                                                                           │
+│  STEP 4: DEFECT DETECTION                                                │
+│  ├─ Load Golden Reference Image                                         │
+│  ├─ SSIM: skimage.metrics.ssim() - structural similarity                │
+│  ├─ Absolute Diff: cv2.absdiff() - pixel differences                    │
+│  ├─ Combined: confidence = ssim * (1 - defect_ratio)                    │
+│  └─ Threshold: 0.85 | Status: PASS / FAIL / SKIPPED                     │
+│                                                                           │
+│  STEP 5: ANGLE/EDGE ALIGNMENT                                            │
+│  ├─ Edge Detection: cv2.Canny()                                          │
+│  ├─ Line Detection: cv2.HoughLinesP()                                    │
+│  ├─ Corner Detection: cv2.goodFeaturesToTrack()                         │
+│  ├─ Calculate angle deviation from 0°, 90°, 180°, 270°                  │
+│  └─ Threshold: 5° deviation | Status: PASS / FAIL                       │
+│                                                                           │
+│  STEP 6: COLOR CALIBRATION                                               │
+│  ├─ Convert: BGR → LAB color space                                      │
+│  ├─ Histogram: cv2.calcHist() for L, A, B channels                      │
+│  ├─ Average Color: cv2.mean()                                            │
+│  ├─ Compare: Euclidean distance + histogram correlation                 │
+│  └─ Threshold: 15 color units | Status: PASS / FAIL                     │
+│                                                                           │
+│  STEP 7: FINAL VERDICT                                                   │
+│  ├─ Aggregate all confidence scores                                     │
+│  ├─ Check critical steps (Logo, QR, Defect)                             │
+│  ├─ Logic: IF (avg_confidence >= 0.75) AND                              │
+│  │          (failed_checks <= 1) AND                                    │
+│  │          (no critical checks failed)                                 │
+│  │       THEN verdict = "GENUINE"                                       │
+│  │       ELSE verdict = "COUNTERFEIT"                                   │
+│  └─ Output: GENUINE / COUNTERFEIT                                        │
+│                                                                           │
+└───────────────────────────────────────┬───────────────────────────────────┘
+                                        │
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      VERIFICATION LAYER                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  IC MARKING VERIFICATION - verify_ic_markings()                          │
+│                                                                           │
+│  1. Part Number Check (CRITICAL)                                         │
+│     ├─ Compare: detected vs expected                                    │
+│     ├─ Must match exactly                                               │
+│     └─ Status: PASS / FAIL                                              │
+│                                                                           │
+│  2. Manufacturer Check (OPTIONAL)                                        │
+│     ├─ Compare: detected vs expected                                    │
+│     ├─ Can be skipped if not provided                                   │
+│     └─ Status: PASS / WARN                                              │
+│                                                                           │
+│  3. Date Code Check (OPTIONAL)                                           │
+│     ├─ Compare: detected vs expected                                    │
+│     ├─ Can vary for genuine ICs (different batches)                     │
+│     └─ Status: PASS / INFO                                              │
+│                                                                           │
+│  4. Overall Authenticity                                                 │
+│     └─ Based primarily on part number match                             │
+│                                                                           │
+│  Output: {part_number_match, manufacturer_match, date_code_match,       │
+│           overall_authentic}                                             │
+│                                                                           │
+└───────────────────────────────────────┬───────────────────────────────────┘
+                                        │
+                                        ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      OUTPUT LAYER                                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                           │
+│  1. Console Output                                                       │
+│     • Real-time progress updates                                        │
+│     • Step-by-step results                                              │
+│     • Final verdict display                                             │
+│     • Performance metrics                                               │
+│                                                                           │
+│  2. JSON Report (detection_report.json)                                  │
+│     • Timestamp, verdict, pipeline results                              │
+│     • Summary: total/passed/failed/skipped checks                       │
+│                                                                           │
+│  3. Debug Images (if DEBUG_MODE=True)                                    │
+│     • debug_enhanced.jpg, debug_bilateral.jpg                           │
+│     • debug_thresh1-6.jpg (various thresholding methods)                │
+│                                                                           │
+│  4. IC Verification Report (ic_verification_report.json)                 │
+│     • Processing time, detected markings, verification results          │
+│                                                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+================================================================================
+                        COMPONENT ARCHITECTURE
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         MAIN COMPONENTS                                  │
+└─────────────────────────────────────────────────────────────────────────┘
+
+1. CounterfeitDetectionAgent (counterfeit_detection_agent.py)
+   ├─ Core detection engine
+   ├─ 7-step pipeline orchestration
+   ├─ Result aggregation and verdict generation
+   └─ Report generation (JSON format)
+
+2. IC Verification Scripts
+   ├─ verify_ic.py (Optimized for speed)
+   │  ├─ Performance-focused (<30ms target)
+   │  ├─ Conditional preprocessing
+   │  ├─ Early exit optimization
+   │  └─ Production-ready
+   │
+   └─ verify_ic_enhanced.py (Optimized for accuracy)
+      ├─ Multiple preprocessing methods (8 variants)
+      ├─ Advanced OCR (5 PSM modes)
+      ├─ OCR error correction
+      ├─ Fragment assembly
+      └─ Reference IC comparison
+
+3. Image Preprocessing Module
+   ├─ crop_roi() - Region of interest cropping
+   ├─ downscale_image() - Performance optimization
+   ├─ assess_image_quality() - Quality assessment
+   └─ preprocess_for_ocr() - Multi-method enhancement
+
+4. OCR Processing Module
+   ├─ extract_text_enhanced() - Optimized OCR
+   ├─ extract_text_multiple_methods() - Accuracy-focused OCR
+   └─ Multiple PSM modes + character whitelist
+
+5. Text Analysis Module
+   ├─ analyze_ic_markings() - Pattern extraction
+   ├─ Fragment assembly for broken text
+   └─ OCR error correction
+
+6. Verification Module
+   ├─ verify_ic_markings() - Marking comparison
+   └─ Multi-level verification (part number, mfg, date)
+
+================================================================================
+                        DATA FLOW DIAGRAM
+================================================================================
+
+INPUT → PREPROCESSING → OCR → TEXT ANALYSIS → DETECTION PIPELINE → 
+VERIFICATION → OUTPUT
+
+Detailed Flow:
+
+1. INPUT STAGE
+   └─ Load: Test IC image, Reference IC, Config files
+
+2. PREPROCESSING STAGE
+   ├─ ROI Cropping (optional)
+   ├─ Downscaling (400px height)
+   ├─ Quality Assessment
+   ├─ Grayscale Conversion
+   ├─ Conditional Enhancement
+   └─ Generate 8 image variants
+
+3. OCR STAGE
+   ├─ For each image variant
+   ├─ Try 5 PSM modes
+   ├─ Apply character whitelist
+   ├─ Extract text
+   ├─ Apply error correction
+   └─ Collect all results
+
+4. TEXT ANALYSIS STAGE
+   ├─ Parse OCR results
+   ├─ Extract part number (regex patterns)
+   ├─ Extract manufacturer mark
+   ├─ Extract date/batch code
+   └─ Assemble fragmented text
+
+5. DETECTION PIPELINE STAGE (7 Steps)
+   ├─ Step 1: Logo Detection
+   ├─ Step 2: Text Area + OCR
+   ├─ Step 3: QR/DMC Detection
+   ├─ Step 4: Defect Detection
+   ├─ Step 5: Angle/Edge Alignment
+   ├─ Step 6: Color Calibration
+   └─ Step 7: Final Verdict
+
+6. VERIFICATION STAGE
+   ├─ Compare detected vs expected markings
+   ├─ Part number check (critical)
+   ├─ Manufacturer check (optional)
+   ├─ Date code check (optional)
+   └─ Generate authenticity result
+
+7. OUTPUT STAGE
+   ├─ Console output (real-time)
+   ├─ JSON reports
+   ├─ Debug images (optional)
+   └─ Performance metrics
+
+================================================================================
+                        TECHNOLOGY STACK MAPPING
+================================================================================
+
+Layer                    | Technologies Used
+-------------------------|---------------------------------------------------
+Input Layer              | Python os, cv2.imread()
+Preprocessing Layer      | OpenCV (cv2), NumPy
+OCR Layer                | Tesseract (pytesseract), OpenCV
+Text Analysis Layer      | Python re (regex), custom algorithms
+Detection Pipeline       | OpenCV, scikit-image (SSIM), pyzbar, NumPy
+Verification Layer       | Python (custom logic)
+Output Layer             | Python json, datetime, cv2.imwrite()
+
+================================================================================
+                        PERFORMANCE CHARACTERISTICS
+================================================================================
+
+Component                | Processing Time  | Optimization Strategy
+-------------------------|------------------|----------------------------------
+Image Loading            | 1-2 ms           | Direct file I/O
+ROI Cropping             | 0.5 ms           | NumPy array slicing
+Downscaling              | 2-5 ms           | cv2.resize with INTER_AREA
+Quality Assessment       | 1-2 ms           | Fast statistical checks
+Preprocessing            | 5-20 ms          | Conditional enhancement
+OCR (per variant)        | 50-200 ms        | Tesseract engine
+OCR (optimized)          | 10-30 ms         | Early exit + reduced PSM modes
+Text Analysis            | 1-2 ms           | Regex pattern matching
+Logo Detection           | 10-50 ms         | Template + feature matching
+Defect Detection         | 20-100 ms        | SSIM calculation
+Full Pipeline            | 100-500 ms       | All 7 steps
+Optimized Pipeline       | 30-100 ms        | Production mode
+
+Target Performance:
+- Single IC verification: <30ms (production mode, verify_ic.py)
+- Enhanced verification: 50-100ms (accuracy mode, verify_ic_enhanced.py)
+- Full 7-step pipeline: 100-500ms (counterfeit_detection_agent.py)
+
+================================================================================
+                        CONFIGURATION OPTIONS
+================================================================================
+
+Performance Tuning:
+- DEBUG_MODE: True/False (enable/disable debug images)
+- ROI: (x, y, w, h) or None (crop to IC area)
+- TARGET_OCR_HEIGHT: 300-500px (downscale target)
+- AUTO_ENHANCE: True/False (conditional preprocessing)
+- EARLY_EXIT_CONFIDENCE: True/False (stop on confident match)
+- OPTIMIZED_PSM_MODES: List of PSM modes to try
+
+Detection Thresholds:
+- logo_match_threshold: 0.7 (logo similarity)
+- ssim_threshold: 0.85 (defect detection)
+- color_tolerance: 15 (color difference)
+- angle_tolerance: 5.0 degrees (alignment)
+- text_similarity: 0.7 (OCR match confidence)
+
+================================================================================
+                        ERROR HANDLING & FALLBACKS
+================================================================================
+
+Component              | Primary Method        | Fallback Method
+-----------------------|-----------------------|---------------------------
+QR Detection           | pyzbar                | OpenCV QRCodeDetector
+Image Enhancement      | Full preprocessing    | Basic Otsu threshold
+OCR                    | Multiple PSM modes    | Single PSM mode
+Feature Matching       | ORB + BFMatcher       | Template matching only
+Text Extraction        | Regex patterns        | Fragment assembly
+
+================================================================================
+                        SCALABILITY CONSIDERATIONS
+================================================================================
+
+1. Batch Processing
+   - Process multiple ICs in parallel
+   - Use multiprocessing for independent images
+   - Queue-based architecture for high throughput
+
+2. Production Deployment
+   - Disable DEBUG_MODE for 2-3x speedup
+   - Use ROI cropping to reduce processing area
+   - Enable EARLY_EXIT for faster OCR
+   - Cache reference IC data
+
+3. Hardware Acceleration
+   - OpenCV supports GPU acceleration (CUDA)
+   - Tesseract can use multiple CPU cores
+   - Consider edge devices (Raspberry Pi, Jetson Nano)
+
+4. Cloud Integration
+   - REST API wrapper for remote processing
+   - S3/Cloud storage for images and reports
+   - Database for historical verification data
+
+================================================================================
+END OF SYSTEM ARCHITECTURE DOCUMENT
+================================================================================

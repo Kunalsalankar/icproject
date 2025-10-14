@@ -1,0 +1,57 @@
+{
+  "verdict": "DIFFERENT",
+  "status": "FAIL",
+  "overall_score": 0.3333333333333333,
+  "part_match": false,
+  "mfg_match": false,
+  "visual_match": "True",
+  "visual_similarity": 0.769790174231751,
+  "processing_time": 8728.617668151855,
+  "reference_markings": {
+    "part_number": "MC74F08N",
+    "manufacturer_mark": "XXAC9321",
+    "date_code": "9321",
+    "additional_codes": [],
+    "all_text": [
+      "MC74FO8N\n\nXXAC9321",
+      "MCT4FOBN\nXXAC9321",
+      "MCTUFOBN\n\nC9321\n\nNF",
+      "MCTUFOEN",
+      "A\n\nMCTUFOBN\n\nXACI321\n\nCO",
+      "TS\n\nMCTUFOBN\n\nXAC9321\n\nCO",
+      "E\n\nI\n\nL\n\nA\n\nT\n\nT\n\nERS\n\nEF\n\nNM\n\nN\n\n1\n\nBM\n\nA\n\nSE\n\nWES\n\nAS\n\nS\n\n7\n\nRS\n\n2\n\nB\n\nY\n\n0\n\nT\n\nNB\n\nSN\n\nSN\n\nAR\n\nG\n\n3\n\n2\n\nSS\n\nTG",
+      "7\nOER B A SS\nAY GQ VN SE\nORRSEE Y VETLEQS WS\n2S ENTE ES\nDF XYVAL BAC\nPL SILEINE BATES",
+      "E\n\nI\n\nS\n\nL\n\nA\n\nT\n\n74\n\nN\n\nER\n\nEF\n\nB\n\nN\n\nN\n\nI\n\nBM\n\nA\n\nSE\n\nWES\n\nA\n\nS\n\nRS\n\n2\n\nKE\n\nY\n\n0\n\nT\n\nNB\n\nSN\n\nSN\n\nARE\n\nG\n\n3\n\n2\n\nSS\n\nG",
+      "7\nOR B SN SS\nAY GQ VN IE\nORRSE SY VETEEQS W\n2S ENTE ES D\nDF XAG BA\nPL LENE BATES",
+      "SE",
+      "SE"
+    ]
+  },
+  "test_markings": {
+    "part_number": "MCT0HCE0N",
+    "manufacturer_mark": null,
+    "date_code": "19S1",
+    "additional_codes": [],
+    "all_text": [
+      "S E\n\nMCTOHCEON\n\nLN\n\n8",
+      "1MC7THHC20N\nFRRI9SI9",
+      "4\n\nM\n\nS\n\nE\n\n1\n\n7\n\nN\n\n3\n\nN\n\nME\n\nS\n\nM\n\nB\n\nS\n\nRY\n\nI\n\nSF\n\n5\n\nS\n\nG\n\nRS\n\nL\n\nS\n\nAN\n\nIS\n\n45\n\nNS\n\nE",
+      "PT\nOO SS 7\n5NSTNANCSRNO ASU\n\nFP",
+      "AS\n\nB\n\nS\n\nC\n\nY\n\nY\n\nB\n\n4\n\nKS\n\n4\n\nS\n\nLG\n\nRS\n\nKS\n\nBNE\n\nS",
+      "TTS A A\nSS\n2",
+      "AS\n\nB\n\nS\n\nC\n\nY\n\nY\n\nB\n\n4\n\nKS\n\nF\n\n7\n\n4\n\nS\n\nEG\n\nRS\n\nK\n\nBENE\n\nS",
+      "TTS A A\nSS\n20",
+      "I\n\nSN\n\nNS\n\nY\n\nS\n\n7\n\n4\n\nFE\n\nI\n\nF\n\nP\n\nNL\n\nSS",
+      "SRE SS\nLENISUPOS GOLETENAA\n1HOREHEESONENBUSAE FOGA\nSL 4\nWOR",
+      "FQ\n\nT\n\nMS\n\nY\n\nS\n\n7\n\n4\n\nI\n\nF\n\nP\n\nNL\n\nS",
+      "TS SAT SS\nF\nEEURNSEAORETEYV GOLETENAA\n1H FGA\nSL TO 4\nWOR",
+      "R\n\n8\n\nE\n\nH\n\nON\n\nR\n\n5\n\nJ\n\n2\n\n7\n\nV\n\nA\n\n5\n\nF\n\nI\n\nAT\n\nA\n\nN",
+      "2\nE\nDIPREESOARPTRRECRROSTCEIERAPNUSACTSANRES\nDMRS ESS\nPRRSTENCPEEEERUSTFWORRRRPR\n4 RDSULS ISRO\nLARGNASRETECUO\nSHRENSCREUNSSREROEENESG",
+      "R\n\n8\n\nA\n\nH\n\nON\n\nR\n\n5\n\n4\n\nJ\n\n2\n\n7\n\nV\n\nAA\n\n5\n\nF\n\nI\n\nT\n\nA\n\nN\n\n3",
+      "2\nE\nDIPREEEOANYTRREROSTCEIERAPNUIACTSCANRSES\nDMRS CESS\nPBSOPRSOSSES\n4 RDSULS IPO\nLARGNASRETECUO\nSHRENECREINGSREROEES"
+    ]
+  },
+  "timestamp": "2025-10-12T11:14:58.260356",
+  "reference_path": "reference/golden_product.jpg",
+  "test_path": "test_images/product_to_verify.jpg"
+}

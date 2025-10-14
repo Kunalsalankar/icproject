@@ -1,0 +1,185 @@
+{
+  "timestamp": "2025-10-14T14:30:37.402392",
+  "test_image": "test_images/product_to_verify.jpg",
+  "reference_image": "reference/golden_product.jpg",
+  "verdict": "COUNTERFEIT",
+  "overall_confidence": 0.6538030396664085,
+  "pipeline_results": [
+    {
+      "step": "1. Logo Detection (Template)",
+      "status": "FAIL",
+      "confidence": 0.3177339249735797,
+      "processing_time_ms": 12.96234130859375,
+      "details": {
+        "template_match_score": 0.0,
+        "motorola_logo_found": true,
+        "motorola_confidence": 0.3177339249735797,
+        "motorola_location": [
+          200,
+          162,
+          64,
+          64
+        ],
+        "template_location": null,
+        "method": "Template: 0.000, Motorola: 0.318",
+        "threshold": 0.8
+      }
+    },
+    {
+      "step": "3. Text & Serial Number OCR",
+      "status": "ERROR",
+      "confidence": 0.0,
+      "processing_time_ms": 52.71029472351074,
+      "details": {
+        "message": "OCR failed: (1, \"Error: Tesseract (legacy) engine requested, but components are not present in C:\\\\Program Files\\\\Tesseract-OCR/tessdata/eng.traineddata!! Failed loading language 'eng' Tesseract couldn't load any languages! Could not initialize tesseract.\")"
+      }
+    },
+    {
+      "step": "4. QR/DMC Code Detection",
+      "status": "SKIPPED",
+      "confidence": 1.0,
+      "details": {
+        "message": "QR/DMC Detection are not present in the test to check"
+      }
+    },
+    {
+      "step": "5. Surface Defect Detection",
+      "status": "FAIL",
+      "confidence": 0.4183301991604506,
+      "processing_time_ms": 51.813364028930664,
+      "details": {
+        "ssim_score": 0.5755321942287227,
+        "defect_ratio": 0.2731419660701003,
+        "defect_pixels": 121912,
+        "method": "absdiff + SSIM + threshold"
+      }
+    },
+    {
+      "step": "6. Edge Detection (Canny)",
+      "status": "PASS",
+      "confidence": 0.10651669795638495,
+      "processing_time_ms": 11.698246002197266,
+      "details": {
+        "edge_density": 0.02571903280863066,
+        "edge_strength": 41.41551463033269,
+        "edge_pixels": 11362,
+        "total_pixels": 441774,
+        "edge_density_pass": true,
+        "edge_strength_pass": true,
+        "canny_low_threshold": 100,
+        "canny_high_threshold": 200,
+        "method": "Canny edge detection with Sobel gradient analysis"
+      }
+    },
+    {
+      "step": "7. IC Outline/Geometry",
+      "status": "FAIL",
+      "confidence": 0.8673613293684371,
+      "processing_time_ms": 9.773731231689453,
+      "details": {
+        "test_size": [
+          857,
+          311
+        ],
+        "reference_size": [
+          798,
+          328
+        ],
+        "size_deviation": 0.06288205269270737,
+        "aspect_deviation": 0.13263867063156284,
+        "area_deviation": 0.021573407227866943,
+        "size_pass": false,
+        "aspect_pass": false,
+        "area_pass": true,
+        "method": "contour analysis + bounding rect comparison"
+      }
+    },
+    {
+      "step": "8. Angle Detection",
+      "status": "PASS",
+      "confidence": 1.0,
+      "processing_time_ms": 8.477449417114258,
+      "details": {
+        "lines_detected": 3,
+        "avg_angle_deviation": 0.0,
+        "max_angle_deviation": 0.0,
+        "angle_tolerance": 2.0,
+        "angle_pass": true,
+        "method": "HoughLinesP + angle deviation analysis"
+      }
+    },
+    {
+      "step": "9. Color Surface Verification",
+      "status": "PASS",
+      "confidence": 1.0,
+      "processing_time_ms": 2.4352073669433594,
+      "details": {
+        "avg_color_bgr": [
+          153,
+          151,
+          150
+        ],
+        "avg_color_lab": [
+          153,
+          151,
+          150
+        ],
+        "color_difference": 0.0,
+        "method": "LAB hist + compareHist"
+      }
+    },
+    {
+      "step": "10. Texture Verification",
+      "status": "PASS",
+      "confidence": 0.9238333217258857,
+      "processing_time_ms": 8.319377899169922,
+      "details": {
+        "texture_distance": 0.011425001741117142,
+        "texture_pass": true,
+        "method": "Fast histogram + gradient texture analysis"
+      }
+    },
+    {
+      "step": "11. Correlation Analysis",
+      "status": "FAIL",
+      "confidence": 0.5966488441465299,
+      "processing_time_ms": 0.6625652313232422,
+      "details": {
+        "total_checks": 7,
+        "passed_checks": 4,
+        "failed_checks": 3,
+        "skipped_checks": 1,
+        "error_checks": 1,
+        "pass_rate": 0.5714285714285714,
+        "critical_failed": [
+          "1. Logo Detection (Template)",
+          "5. Surface Defect Detection"
+        ],
+        "weighted_confidence": 0.5966488441465299,
+        "correlation_pass": false,
+        "method": "Weighted composite analysis"
+      }
+    },
+    {
+      "step": "Final Verdict",
+      "status": "FAIL",
+      "confidence": 0.6538030396664085,
+      "details": {
+        "verdict": "COUNTERFEIT",
+        "passed_checks": 4,
+        "failed_checks": 4,
+        "total_checks": 8,
+        "critical_failed": true,
+        "max_allowed_failures": 1,
+        "method": "Weighted Analysis with Critical Check Validation"
+      }
+    }
+  ],
+  "summary": {
+    "total_checks": 9,
+    "passed": 4,
+    "failed": 5,
+    "skipped": 1,
+    "errors": 1
+  }
+}

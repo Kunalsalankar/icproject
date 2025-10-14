@@ -1,0 +1,266 @@
+=======================================================================
+                COUNTERFEIT DETECTION SYSTEM ARCHITECTURE
+=======================================================================
+
++----------------------------+
+|                            |
+|      Input Images          |
+|  (Test & Reference)        |
+|                            |
++------------+---------------+
+             |
+             v
++------------+---------------+
+|                            |
+|  Image Preprocessing       |
+|  - Downscaling             |
+|  - ROI Cropping            |
+|  - CLAHE Enhancement       |
+|  - Bilateral Filtering     |
+|  - Multiple Thresholding   |
+|                            |
++------------+---------------+
+             |
+             v
++------------+---------------+      +-------------------------+
+|                            |      |                         |
+|  CounterfeitDetectionAgent +----->+  7-Step Detection       |
+|                            |      |  Pipeline               |
++----------------------------+      |                         |
+                                    +-----+-------------------+
+                                          |
+                                          v
+                                    +-----+-------------------+
+                                    |                         |
+                                    |  1. Logo Detection      |
+                                    |  - Template Matching    |
+                                    |  - ORB Feature Matching |
+                                    |                         |
+                                    +-------------------------+
+                                          |
+                                          v
+                                    +-----+-------------------+
+                                    |                         |
+                                    |  2. Text Area + OCR     |
+                                    |  - Contour Detection    |
+                                    |  - Tesseract OCR        |
+                                    |  - Multiple PSM Modes   |
+                                    |  - Character Whitelist  |
+                                    |                         |
+                                    +-------------------------+
+                                          |
+                                          v
+                                    +-----+-------------------+
+                                    |                         |
+                                    |  3. QR/DMC Detection    |
+                                    |  - pyzbar (primary)     |
+                                    |  - OpenCV QRCodeDetector|
+                                    |                         |
+                                    +-------------------------+
+                                          |
+                                          v
+                                    +-----+-------------------+
+                                    |                         |
+                                    |  4. Defect Detection    |
+                                    |  - SSIM Comparison      |
+                                    |  - Absolute Difference  |
+                                    |                         |
+                                    +-------------------------+
+                                          |
+                                          v
+                                    +-----+-------------------+
+                                    |                         |
+                                    |  5. Angle/Edge Check    |
+                                    |  - Canny Edge Detection |
+                                    |  - Hough Line Transform |
+                                    |                         |
+                                    +-------------------------+
+                                          |
+                                          v
+                                    +-----+-------------------+
+                                    |                         |
+                                    |  6. Color Calibration   |
+                                    |  - Color Space Analysis |
+                                    |  - Histogram Comparison |
+                                    |                         |
+                                    +-------------------------+
+                                          |
+                                          v
+                                    +-----+-------------------+
+                                    |                         |
+                                    |  7. Final Verdict       |
+                                    |  - Weighted Analysis    |
+                                    |  - Report Generation    |
+                                    |                         |
+                                    +-------------------------+
+
+=======================================================================
+                    PERFORMANCE OPTIMIZATIONS
+=======================================================================
+
++----------------------------+      +-------------------------+
+|                            |      |                         |
+|  Speed Optimizations       +----->+  - Cached Images        |
+|                            |      |  - Early Exit           |
++----------------------------+      |  - Optimized PSM Modes  |
+                                    |  - Limited Processing   |
+                                    |  - Smart OCR Caching    |
+                                    |  - Conditional Enhance  |
+                                    |                         |
+                                    +-------------------------+
+
++----------------------------+      +-------------------------+
+|                            |      |                         |
+|  Accuracy Optimizations    +----->+  - Multiple Thresholds  |
+|                            |      |  - OCR Error Correction |
++----------------------------+      |  - Pattern Matching     |
+                                    |  - Text Assembly        |
+                                    |  - Fragment Reassembly  |
+                                    |                         |
+                                    +-------------------------+
+
+=======================================================================
+                    ENHANCED IC VERIFICATION FLOW
+=======================================================================
+
+1. Configuration Loading
+   +----------------------------+
+   |                            |
+   |  Load Reference Config     |
+   |  - From config file        |
+   |  - From reference image    |
+   |                            |
+   +------------+---------------+
+                |
+                v
+   +------------+---------------+
+   |                            |
+   |  Extract Reference         |
+   |  Markings                  |
+   |  - Part number             |
+   |  - Manufacturer code       |
+   |  - Date code               |
+   |                            |
+   +------------+---------------+
+                |
+                v
+2. Image Processing Pipeline
+   +----------------------------+
+   |                            |
+   |  Preprocessing             |
+   |  - Check cached images     |
+   |  - Crop ROI                |
+   |  - Downscale               |
+   |  - CLAHE enhancement       |
+   |  - Bilateral filtering     |
+   |  - Multiple thresholding   |
+   |                            |
+   +------------+---------------+
+                |
+                v
+   +------------+---------------+
+   |                            |
+   |  OCR Extraction            |
+   |  - Multiple PSM modes      |
+   |  - Character whitelist     |
+   |  - Smart early exit        |
+   |  - Limited image variants  |
+   |                            |
+   +------------+---------------+
+                |
+                v
+3. Analysis Pipeline
+   +----------------------------+
+   |                            |
+   |  IC Marking Analysis       |
+   |  - Pattern matching        |
+   |  - OCR error correction    |
+   |  - Text assembly           |
+   |  - Fragment reassembly     |
+   |                            |
+   +------------+---------------+
+                |
+                v
+   +------------+---------------+
+   |                            |
+   |  Verification              |
+   |  - Compare with reference  |
+   |  - Similarity scoring      |
+   |  - Confidence calculation  |
+   |                            |
+   +------------+---------------+
+                |
+                v
+   +------------+---------------+
+   |                            |
+   |  Result Generation         |
+   |  - Authenticity verdict    |
+   |  - Confidence score        |
+   |  - Detailed report         |
+   |                            |
+   +------------+---------------+
+
+=======================================================================
+                    DATA FLOW ARCHITECTURE
+=======================================================================
+
+1. Load Configuration
+   - From config file or defaults
+   - Extract reference markings
+
+2. Image Processing Flow
+   - Reference Image → Preprocessing → OCR → Analysis
+   - Test Image → Preprocessing → OCR → Analysis
+
+3. Comparison Flow
+   - Reference Data ↔ Test Data → Similarity Metrics
+
+4. Decision Flow
+   - Individual Test Results → Weighted Scoring → Final Verdict
+
+=======================================================================
+                    KEY COMPONENTS
+=======================================================================
+
+1. CounterfeitDetectionAgent
+   - Core detection engine
+   - Implements 7-step verification pipeline
+   - Generates comprehensive reports
+
+2. Image Preprocessing Module
+   - Multiple enhancement techniques
+   - Optimized for different IC marking types
+   - Caching for reference images
+   - Conditional enhancement based on image quality
+
+3. OCR Module
+   - Multiple PSM modes
+   - Character whitelist optimization
+   - Error correction for IC markings
+   - Smart early exit when confidence is high
+
+4. Analysis Module
+   - Pattern matching for part numbers
+   - Manufacturer code detection
+   - Date code extraction
+   - Text fragment reassembly
+
+5. Performance Optimization Module
+   - Image caching system
+   - OCR result caching
+   - Conditional processing
+   - Early exit strategies
+
+=======================================================================
+                    SYSTEM REQUIREMENTS
+=======================================================================
+
+- OpenCV (cv2)
+- NumPy
+- pytesseract
+- scikit-image (for SSIM)
+- pyzbar (optional, falls back to OpenCV)
+- json (for configuration)
+- time (for performance measurement)
+
+=======================================================================
