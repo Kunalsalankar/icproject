@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test outputs
+test_layer_visualizations/
+*.jpg
+*.png
+*.jpeg
+
+# Keep only essential reference images
+!reference/golden_product.jpg
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# Large files
+*.pth
+*.bin
+*.onnx
+*.h5
+
+# Documentation (keep only essential)
+unwanted_codee/
+OPTIMIZATION_*.txt
+PERFORMANCE_*.md
+SPEED_*.md
