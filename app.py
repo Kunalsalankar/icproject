@@ -26,9 +26,9 @@ from complete_7step_verification import (
 )
 
 # Initialize AI Agent on startup
-print("🚀 Initializing AI Agent...")
+print("Initializing AI Agent...")
 initialize_ai_agent()
-print("✅ AI Agent ready!")
+print("AI Agent ready!")
 
 def verify_ic(test_image, reference_image=None):
     """
@@ -81,18 +81,18 @@ def verify_ic(test_image, reference_image=None):
         total = len(results)
         confidence = sum(r.get('confidence', 0) for r in results) / total if total > 0 else 0
         
-        verdict = "✅ GENUINE" if confidence > 0.7 else "❌ COUNTERFEIT"
+        verdict = "GENUINE" if confidence > 0.7 else "COUNTERFEIT"
         
         # Format results for display with better styling
         verdict_color = "#16a34a" if "GENUINE" in verdict else "#dc2626"
         
         output_text = f"""
 <div style="background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); padding: 24px; border-radius: 12px; border: 2px solid #93c5fd; margin-bottom: 20px;">
-    <h1 style="color: #1e3a8a; margin: 0 0 16px 0;">🔍 IC Verification Results</h1>
+    <h1 style="color: #0f172a; margin: 0 0 16px 0; font-weight: 800;">IC Verification Results</h1>
     <div style="background: white; padding: 20px; border-radius: 10px; border-left: 5px solid {verdict_color};">
-        <h2 style="color: {verdict_color}; margin: 0 0 12px 0;">{verdict}</h2>
-        <p style="margin: 4px 0; color: #475569;"><strong>Overall Confidence:</strong> <span style="color: #1e40af; font-size: 1.2em; font-weight: 600;">{confidence:.1%}</span></p>
-        <p style="margin: 4px 0; color: #475569;"><strong>Tests Passed:</strong> <span style="color: #1e40af; font-weight: 600;">{passed}/{total}</span></p>
+        <h2 style="color: {verdict_color}; margin: 0 0 12px 0; font-weight: 800; font-size: 1.8em;">{verdict}</h2>
+        <p style="margin: 4px 0; color: #0f172a; font-weight: 600; font-size: 1.05em;"><strong style="font-weight: 700;">Overall Confidence:</strong> <span style="color: #1e40af; font-size: 1.3em; font-weight: 700;">{confidence:.1%}</span></p>
+        <p style="margin: 4px 0; color: #0f172a; font-weight: 600; font-size: 1.05em;"><strong style="font-weight: 700;">Tests Passed:</strong> <span style="color: #1e40af; font-weight: 700; font-size: 1.1em;">{passed}/{total}</span></p>
     </div>
 </div>
 """
@@ -106,33 +106,33 @@ def verify_ic(test_image, reference_image=None):
                 
                 output_text += f"""
 <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-    <h2 style="color: #2563eb; margin: 0 0 16px 0; border-bottom: 2px solid #dbeafe; padding-bottom: 8px;">🤖 AI Agent Analysis</h2>
+    <h2 style="color: #1e40af; margin: 0 0 16px 0; border-bottom: 2px solid #dbeafe; padding-bottom: 8px; font-weight: 800; font-size: 1.5em;">AI Agent Analysis</h2>
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
         <div style="background: #f8fafc; padding: 12px; border-radius: 8px;">
-            <p style="margin: 0; color: #64748b; font-size: 0.85em;">Part Number</p>
-            <p style="margin: 4px 0 0 0; color: #1e293b; font-weight: 600; font-size: 1.1em;">{details.get('part_number', 'Unknown')}</p>
+            <p style="margin: 0; color: #475569; font-size: 0.9em; font-weight: 600;">Part Number</p>
+            <p style="margin: 4px 0 0 0; color: #0f172a; font-weight: 700; font-size: 1.2em;">{details.get('part_number', 'Unknown')}</p>
         </div>
         <div style="background: #f8fafc; padding: 12px; border-radius: 8px;">
-            <p style="margin: 0; color: #64748b; font-size: 0.85em;">Manufacturer</p>
-            <p style="margin: 4px 0 0 0; color: #1e293b; font-weight: 600; font-size: 1.1em;">{details.get('oem_manufacturer', 'Unknown')}</p>
+            <p style="margin: 0; color: #475569; font-size: 0.9em; font-weight: 600;">Manufacturer</p>
+            <p style="margin: 4px 0 0 0; color: #0f172a; font-weight: 700; font-size: 1.2em;">{details.get('oem_manufacturer', 'Unknown')}</p>
         </div>
         <div style="background: #f8fafc; padding: 12px; border-radius: 8px;">
-            <p style="margin: 0; color: #64748b; font-size: 0.85em;">Package</p>
-            <p style="margin: 4px 0 0 0; color: #1e293b; font-weight: 600;">{details.get('oem_package', 'Unknown')}</p>
+            <p style="margin: 0; color: #475569; font-size: 0.9em; font-weight: 600;">Package</p>
+            <p style="margin: 4px 0 0 0; color: #0f172a; font-weight: 700; font-size: 1.1em;">{details.get('oem_package', 'Unknown')}</p>
         </div>
         <div style="background: #f8fafc; padding: 12px; border-radius: 8px;">
-            <p style="margin: 0; color: #64748b; font-size: 0.85em;">Status</p>
-            <p style="margin: 4px 0 0 0; color: #1e293b; font-weight: 600;">{details.get('oem_status', 'Unknown')}</p>
+            <p style="margin: 0; color: #475569; font-size: 0.9em; font-weight: 600;">Status</p>
+            <p style="margin: 4px 0 0 0; color: #0f172a; font-weight: 700; font-size: 1.1em;">{details.get('oem_status', 'Unknown')}</p>
         </div>
     </div>
     <div style="background: #eff6ff; padding: 12px; border-radius: 8px; margin-top: 12px; border-left: 4px solid {ai_conf_color};">
-        <p style="margin: 0; color: #64748b; font-size: 0.85em;">AI Confidence</p>
-        <p style="margin: 4px 0 0 0; color: {ai_conf_color}; font-weight: 700; font-size: 1.3em;">{ai_conf:.1%}</p>
-        <p style="margin: 8px 0 0 0; color: #64748b; font-size: 0.9em;"><strong>Method:</strong> {details.get('method', 'N/A')}</p>
+        <p style="margin: 0; color: #475569; font-size: 0.95em; font-weight: 700;">AI Confidence</p>
+        <p style="margin: 4px 0 0 0; color: {ai_conf_color}; font-weight: 800; font-size: 1.5em;">{ai_conf:.1%}</p>
+        <p style="margin: 8px 0 0 0; color: #1e293b; font-size: 1em; font-weight: 600;"><strong style="font-weight: 700;">Method:</strong> {details.get('method', 'N/A')}</p>
     </div>
     <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin-top: 12px;">
-        <p style="margin: 0; color: #64748b; font-size: 0.85em;">Description</p>
-        <p style="margin: 4px 0 0 0; color: #475569; line-height: 1.5;">{details.get('oem_description', 'Not found in database')}</p>
+        <p style="margin: 0; color: #475569; font-size: 0.95em; font-weight: 700;">Description</p>
+        <p style="margin: 4px 0 0 0; color: #1e293b; line-height: 1.5; font-weight: 500; font-size: 1em;">{details.get('oem_description', 'Not found in database')}</p>
     </div>
 </div>
 """
@@ -140,7 +140,7 @@ def verify_ic(test_image, reference_image=None):
         # Add other test results with better formatting
         output_text += """
 <div style="background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-    <h2 style="color: #2563eb; margin: 0 0 16px 0; border-bottom: 2px solid #dbeafe; padding-bottom: 8px;">📊 Detailed Test Results</h2>
+    <h2 style="color: #1e40af; margin: 0 0 16px 0; border-bottom: 2px solid #dbeafe; padding-bottom: 8px; font-weight: 800; font-size: 1.5em;">Detailed Test Results</h2>
 """
         
         for i, result in enumerate(results, 1):
@@ -151,15 +151,14 @@ def verify_ic(test_image, reference_image=None):
             if 'AI Agent' in step:
                 continue  # Skip AI Agent as we already showed it
             
-            status_emoji = "✅" if status == "PASS" else "❌" if status == "FAIL" else "⚠️"
             status_color = "#16a34a" if status == "PASS" else "#dc2626" if status == "FAIL" else "#f59e0b"
             
             output_text += f"""
     <div style="background: #f8fafc; padding: 14px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid {status_color};">
-        <h3 style="margin: 0 0 8px 0; color: #1e293b; font-size: 1.05em;">{status_emoji} {step}</h3>
+        <h3 style="margin: 0 0 8px 0; color: #0f172a; font-size: 1.15em; font-weight: 700;">{step}</h3>
         <div style="display: flex; gap: 20px; flex-wrap: wrap;">
-            <span style="color: #64748b;"><strong>Status:</strong> <span style="color: {status_color}; font-weight: 600;">{status}</span></span>
-            <span style="color: #64748b;"><strong>Confidence:</strong> <span style="color: #2563eb; font-weight: 600;">{conf:.1%}</span></span>
+            <span style="color: #1e293b; font-weight: 600; font-size: 1em;"><strong style="font-weight: 700;">Status:</strong> <span style="color: {status_color}; font-weight: 700; font-size: 1.05em;">{status}</span></span>
+            <span style="color: #1e293b; font-weight: 600; font-size: 1em;"><strong style="font-weight: 700;">Confidence:</strong> <span style="color: #1e40af; font-weight: 700; font-size: 1.05em;">{conf:.1%}</span></span>
         </div>
 """
             
@@ -169,7 +168,7 @@ def verify_ic(test_image, reference_image=None):
                 output_text += '<div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid #e2e8f0;">'
                 for key, value in list(details.items())[:3]:  # Show first 3 details
                     if isinstance(value, (int, float, str, bool)) and key not in ['part_number', 'oem_manufacturer', 'oem_description', 'oem_package', 'oem_status', 'ai_confidence', 'method']:
-                        output_text += f'<span style="color: #64748b; font-size: 0.9em; margin-right: 15px;">• <strong>{key}:</strong> {value}</span>'
+                        output_text += f'<span style="color: #1e293b; font-size: 0.95em; margin-right: 15px; font-weight: 600;">• <strong style="font-weight: 700;">{key}:</strong> {value}</span>'
                 output_text += '</div>'
             
             output_text += '    </div>\n'
@@ -187,7 +186,7 @@ def verify_ic(test_image, reference_image=None):
         return output_text, json_output
         
     except Exception as e:
-        error_msg = f"❌ Error during verification: {str(e)}"
+        error_msg = f"Error during verification: {str(e)}"
         return error_msg, json.dumps({'error': str(e)}, indent=2)
 
 
@@ -436,7 +435,7 @@ with gr.Blocks(title="IC Counterfeit Detection System", theme=custom_theme, css=
                 <span style="color: #1e40af; font-size: 0.9em; font-weight: 700; letter-spacing: 1px;">ADVANCED AI VERIFICATION</span>
             </div>
             <h1 style="color: #1e3a8a; margin: 0; font-size: 3em; font-weight: 800; letter-spacing: -1px; text-shadow: 0 2px 8px rgba(30, 58, 138, 0.1);">
-                🔬 IC Counterfeit Detection System
+                IC Counterfeit Detection System
             </h1>
             <p style="color: #1e40af; margin-top: 16px; font-size: 1.2em; font-weight: 600;">
                 Powered by Hugging Face AI Agent + Computer Vision
@@ -466,7 +465,6 @@ with gr.Blocks(title="IC Counterfeit Detection System", theme=custom_theme, css=
                 <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: linear-gradient(135deg, #3b82f6 0%, transparent 100%); opacity: 0.1; border-radius: 0 0 0 100%;"></div>
                 <div style="position: relative; z-index: 1;">
                     <h3 style="color: #2563eb; margin: 0 0 8px 0; font-weight: 700; font-size: 1.3em; display: flex; align-items: center; gap: 10px;">
-                        <span style="background: linear-gradient(135deg, #3b82f6, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.2em;">📸</span>
                         Upload IC Images
                     </h3>
                     <p style="color: #64748b; margin: 0; font-size: 0.95em; line-height: 1.5;">Upload clear, high-resolution images of the IC chip for comprehensive verification</p>
@@ -493,7 +491,7 @@ with gr.Blocks(title="IC Counterfeit Detection System", theme=custom_theme, css=
             )
             
             verify_btn = gr.Button(
-                "🚀 Start Verification", 
+                "Start Verification", 
                 variant="primary", 
                 size="lg",
                 elem_id="verify-button"
@@ -501,7 +499,7 @@ with gr.Blocks(title="IC Counterfeit Detection System", theme=custom_theme, css=
             
             gr.HTML("""
             <div style="background: #eff6ff; padding: 18px; border-radius: 10px; border-left: 4px solid #2563eb; margin-top: 20px; border: 1px solid #dbeafe;">
-                <h4 style="margin-top: 0; color: #1e40af; font-weight: 600;">📋 Instructions</h4>
+                <h4 style="margin-top: 0; color: #1e40af; font-weight: 600;">Instructions</h4>
                 <ol style="margin: 0; padding-left: 20px; color: #475569; line-height: 1.8;">
                     <li>Upload the IC chip image you want to verify</li>
                     <li>Optionally upload a reference (genuine) IC image</li>
@@ -516,7 +514,6 @@ with gr.Blocks(title="IC Counterfeit Detection System", theme=custom_theme, css=
                 <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background: linear-gradient(135deg, #10b981 0%, transparent 100%); opacity: 0.1; border-radius: 0 0 0 100%;"></div>
                 <div style="position: relative; z-index: 1;">
                     <h3 style="color: #2563eb; margin: 0 0 8px 0; font-weight: 700; font-size: 1.3em; display: flex; align-items: center; gap: 10px;">
-                        <span style="background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.2em;">📊</span>
                         Verification Results
                     </h3>
                     <p style="color: #64748b; margin: 0; font-size: 0.95em; line-height: 1.5;">Comprehensive analysis with AI-powered confidence scores and detailed test results</p>
@@ -528,14 +525,14 @@ with gr.Blocks(title="IC Counterfeit Detection System", theme=custom_theme, css=
                 value="""
 <div style="background: #eff6ff; padding: 24px; border-radius: 12px; text-align: center; border: 1px solid #dbeafe;">
     <p style="color: #1e40af; font-size: 1.1em; margin: 0; font-weight: 500;">
-        ⬆️ Upload an IC image and click <strong>"Start Verification"</strong> to begin analysis
+        Upload an IC image and click <strong>"Start Verification"</strong> to begin analysis
     </p>
    
 </div>
                 """
             )
             
-            with gr.Accordion("📄 JSON Results (for API integration)", open=False):
+            with gr.Accordion("JSON Results (for API integration)", open=False):
                 json_output = gr.Code(
                     value="{}",
                     language="json",
@@ -545,18 +542,12 @@ with gr.Blocks(title="IC Counterfeit Detection System", theme=custom_theme, css=
     # Examples Section
     gr.HTML("""
     <div style="margin-top: 30px; padding: 22px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;">
-        <h3 style="color: #2563eb; margin-top: 0; font-weight: 600;">📋 Try Example Images</h3>
+        <h3 style="color: #2563eb; margin-top: 0; font-weight: 600;">Try Example Images</h3>
         <p style="color: #64748b; margin-bottom: 0;">Click on an example below to load it automatically</p>
     </div>
     """)
     
-    gr.Examples(
-        examples=[
-            ["test_images/product_to_verify.jpg", None],
-        ],
-        inputs=[test_image, reference_image],
-    )
-    
+   
     # Connect button to function
     verify_btn.click(
         fn=verify_ic,
@@ -567,29 +558,29 @@ with gr.Blocks(title="IC Counterfeit Detection System", theme=custom_theme, css=
     # Features Section
     gr.HTML("""
     <div style="margin-top: 30px; padding: 32px; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;">
-        <h3 style="color: #2563eb; text-align: center; margin-top: 0; font-weight: 600;">🛠️ Technology Stack</h3>
+        <h3 style="color: #2563eb; text-align: center; margin-top: 0; font-weight: 600;">Technology Stack</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin-top: 24px;">
             <div style="padding: 18px; background: #eff6ff; border-radius: 10px; border-left: 4px solid #2563eb; border: 1px solid #dbeafe;">
-                <h4 style="margin: 0; color: #1e40af; font-weight: 600;">🤖 AI Model</h4>
+                <h4 style="margin: 0; color: #1e40af; font-weight: 600;">AI Model</h4>
                 <p style="margin: 8px 0 0 0; color: #64748b; font-size: 0.9em;">Salesforce BLIP Vision-Language Model</p>
             </div>
             <div style="padding: 18px; background: #f0fdf4; border-radius: 10px; border-left: 4px solid #16a34a; border: 1px solid #dcfce7;">
-                <h4 style="margin: 0; color: #15803d; font-weight: 600;">🔧 Framework</h4>
+                <h4 style="margin: 0; color: #15803d; font-weight: 600;">Framework</h4>
                 <p style="margin: 8px 0 0 0; color: #64748b; font-size: 0.9em;">Hugging Face Transformers + PyTorch</p>
             </div>
             <div style="padding: 18px; background: #fef3c7; border-radius: 10px; border-left: 4px solid #f59e0b; border: 1px solid #fde68a;">
-                <h4 style="margin: 0; color: #d97706; font-weight: 600;">👁️ Computer Vision</h4>
+                <h4 style="margin: 0; color: #d97706; font-weight: 600;">Computer Vision</h4>
                 <p style="margin: 8px 0 0 0; color: #64748b; font-size: 0.9em;">OpenCV + scikit-image</p>
             </div>
             <div style="padding: 18px; background: #fce7f3; border-radius: 10px; border-left: 4px solid #ec4899; border: 1px solid #fbcfe8;">
-                <h4 style="margin: 0; color: #db2777; font-weight: 600;">📝 OCR</h4>
+                <h4 style="margin: 0; color: #db2777; font-weight: 600;">OCR</h4>
                 <p style="margin: 8px 0 0 0; color: #64748b; font-size: 0.9em;">Tesseract OCR Engine</p>
             </div>
         </div>
     </div>
     
     <div style="margin-top: 20px; padding: 32px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
-        <h3 style="color: #2563eb; text-align: center; margin-top: 0; font-weight: 600;">📖 11-Layer Verification System</h3>
+        <h3 style="color: #2563eb; text-align: center; margin-top: 0; font-weight: 600;">11-Layer Verification System</h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 24px;">
             <div style="padding: 14px; background: white; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; transition: all 0.2s;">
                 <strong style="color: #2563eb;">✓</strong> <span style="color: #475569;">Logo Detection</span>
@@ -630,7 +621,7 @@ with gr.Blocks(title="IC Counterfeit Detection System", theme=custom_theme, css=
     
     <div style="margin-top: 20px; padding: 24px; background: white; border-radius: 12px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e2e8f0;">
         <p style="color: #64748b; margin: 0; font-size: 0.9em;">
-            Made with ❤️ using Hugging Face Spaces | 
+            Made with Hugging Face Spaces | 
             <a href="https://huggingface.co/Salesforce/blip-image-captioning-large" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">BLIP Model</a> | 
             <a href="https://github.com" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: 500;">GitHub</a>
         </p>

@@ -39,10 +39,10 @@ try:
     import torch
     from PIL import Image
     AI_AGENT_AVAILABLE = True
-    print("✓ Hugging Face AI Agent loaded successfully")
+    print("Hugging Face AI Agent loaded successfully")
 except ImportError:
     AI_AGENT_AVAILABLE = False
-    print("⚠️  Warning: transformers/torch not installed. AI Agent will use offline database only.")
+    print("Warning: transformers/torch not installed. AI Agent will use offline database only.")
     print("   Install with: pip install transformers torch accelerate")
 
 # Legacy web scraping imports (fallback)
@@ -136,14 +136,14 @@ def initialize_ai_agent():
     global AI_MODEL, AI_PROCESSOR
     
     if not AI_AGENT_AVAILABLE:
-        print("⚠️  AI Agent not available - install transformers and torch")
+        print("AI Agent not available - install transformers and torch")
         return False
     
     if AI_MODEL is not None:
         return True  # Already initialized
     
     try:
-        print("🤖 Initializing Hugging Face AI Agent...")
+        print("Initializing Hugging Face AI Agent...")
         print(f"   Model: {AI_MODEL_NAME}")
         print(f"   Device: {'GPU (CUDA)' if AI_USE_GPU else 'CPU'}")
         
@@ -154,11 +154,11 @@ def initialize_ai_agent():
         if AI_USE_GPU:
             AI_MODEL = AI_MODEL.to("cuda")
         
-        print("✓ AI Agent initialized successfully")
+        print("AI Agent initialized successfully")
         return True
         
     except Exception as e:
-        print(f"⚠️  Failed to initialize AI Agent: {str(e)}")
+        print(f"Failed to initialize AI Agent: {str(e)}")
         return False
 
 # ============================================================================
@@ -448,7 +448,7 @@ def detect_logo_template(image, logo_template_path=None):
     print(f"  Status: {status}")
     
     step_time = (time.time() - step_start_time) * 1000
-    print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+    print(f"  Processing Time: {step_time:.2f}ms")
     
     return {
         'step': '1. Logo Detection (Template)',
@@ -523,7 +523,7 @@ def detect_and_read_text(image, expected_text=None):
     except Exception as e:
         step_time = (time.time() - step_start_time) * 1000
         print(f"  OCR Error: {str(e)}")
-        print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+        print(f"  Processing Time: {step_time:.2f}ms")
         return {
             'step': '3. Text & Serial Number OCR',
             'status': 'ERROR',
@@ -560,7 +560,7 @@ def detect_and_read_text(image, expected_text=None):
     print(f"  Status: {status}")
     
     step_time = (time.time() - step_start_time) * 1000
-    print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+    print(f"  Processing Time: {step_time:.2f}ms")
     
     return {
         'step': '3. Text & Serial Number OCR',
@@ -660,7 +660,7 @@ def detect_qr_code(image, expected_data=None):
     print(f"  Status: {status}")
     
     step_time = (time.time() - step_start_time) * 1000
-    print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+    print(f"  Processing Time: {step_time:.2f}ms")
     
     return {
         'step': '4. QR/DMC Code Detection',
@@ -747,7 +747,7 @@ def detect_defects(image, golden_image_path):
     print(f"  Status: {status}")
     
     step_time = (time.time() - step_start_time) * 1000
-    print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+    print(f"  Processing Time: {step_time:.2f}ms")
     
     return {
         'step': '5. Surface Defect Detection',
@@ -821,7 +821,7 @@ def detect_edges_canny(image):
     print(f"  Status: {status}")
     
     step_time = (time.time() - step_start_time) * 1000
-    print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+    print(f"  Processing Time: {step_time:.2f}ms")
     
     return {
         'step': '6. Edge Detection (Canny)',
@@ -915,7 +915,7 @@ def check_angle_detection(image):
     print(f"  Status: {status}")
     
     step_time = (time.time() - step_start_time) * 1000
-    print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+    print(f"  Processing Time: {step_time:.2f}ms")
     
     return {
         'step': '8. Angle Detection',
@@ -991,7 +991,7 @@ def verify_color(image, color_reference=None):
     print(f"  Status: {status}")
     
     step_time = (time.time() - step_start_time) * 1000
-    print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+    print(f"  Processing Time: {step_time:.2f}ms")
     
     return {
         'step': '9. Color Surface Verification',
@@ -1120,7 +1120,7 @@ def check_ic_geometry(image, reference_image_path):
     print(f"  Status: {status}")
     
     step_time = (time.time() - step_start_time) * 1000
-    print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+    print(f"  Processing Time: {step_time:.2f}ms")
     
     return {
         'step': '7. IC Outline/Geometry',
@@ -1245,7 +1245,7 @@ def verify_texture(image, reference_image_path):
         print(f"  Status: {status}")
         
         step_time = (time.time() - step_start_time) * 1000
-        print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+        print(f"  Processing Time: {step_time:.2f}ms")
         
         return {
             'step': '10. Texture Verification',
@@ -1403,7 +1403,7 @@ def verify_font_characteristics(image, reference_image_path):
         print(f"  Status: {status}")
         
         step_time = (time.time() - step_start_time) * 1000
-        print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+        print(f"  Processing Time: {step_time:.2f}ms")
         
         return {
             'step': '10.5 Font Verification',
@@ -1424,7 +1424,7 @@ def verify_font_characteristics(image, reference_image_path):
     except Exception as e:
         step_time = (time.time() - step_start_time) * 1000
         print(f"  Font verification error: {str(e)}")
-        print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+        print(f"  Processing Time: {step_time:.2f}ms")
         return {
             'step': '10.5 Font Verification',
             'status': 'ERROR',
@@ -1479,7 +1479,7 @@ def ai_agent_oem_verification(image, ocr_text=None, logo_detected=False):
                 break
         
         if not part_number:
-            print("  ⚠️  Could not extract IC part number from OCR")
+            print("  Could not extract IC part number from OCR")
             step_time = (time.time() - step_start_time) * 1000
             return {
                 'step': '10.6 AI Agent OEM Verification',
@@ -1556,17 +1556,17 @@ def ai_agent_oem_verification(image, ocr_text=None, logo_detected=False):
             status = "PASS" if confidence >= 0.7 and is_active else "FAIL"
             
             if is_obsolete:
-                print(f"  ⚠️  WARNING: Part is OBSOLETE/DISCONTINUED - High counterfeit risk!")
+                print(f"  WARNING: Part is OBSOLETE/DISCONTINUED - High counterfeit risk!")
             
         else:
-            print(f"  ⚠️  No OEM data found online")
+            print(f"  No OEM data found online")
             confidence = 0.5  # Neutral - not found doesn't mean fake
             status = "PASS"  # Don't fail if no data found
         
         step_time = (time.time() - step_start_time) * 1000
         print(f"  Confidence: {confidence:.3f}")
         print(f"  Status: {status}")
-        print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+        print(f"  Processing Time: {step_time:.2f}ms")
         
         return {
             'step': '10.6 AI Agent OEM Verification',
@@ -1590,8 +1590,8 @@ def ai_agent_oem_verification(image, ocr_text=None, logo_detected=False):
         
     except Exception as e:
         step_time = (time.time() - step_start_time) * 1000
-        print(f"  ⚠️  AI Agent Error: {str(e)}")
-        print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+        print(f"  AI Agent Error: {str(e)}")
+        print(f"  Processing Time: {step_time:.2f}ms")
         return {
             'step': '10.6 AI Agent OEM Verification',
             'status': 'ERROR',
@@ -1609,10 +1609,10 @@ def analyze_ic_with_ai_agent(image, part_number=None):
     Use Hugging Face AI Agent to analyze IC image and extract information
     Replaces web scraping with vision-language model analysis
     """
-    print(f"  🤖 Analyzing IC with AI Agent...")
+    print(f"  Analyzing IC with AI Agent...")
     
     if not initialize_ai_agent():
-        print("  ⚠️  AI Agent not available, falling back to database")
+        print("  AI Agent not available, falling back to database")
         return analyze_ic_with_database(part_number)
     
     try:
@@ -1621,7 +1621,7 @@ def analyze_ic_with_ai_agent(image, part_number=None):
         pil_image = Image.fromarray(image_rgb)
         
         # Generate detailed description of the IC
-        print("  🔍 Generating IC description...")
+        print("  Generating IC description...")
         inputs = AI_PROCESSOR(pil_image, return_tensors="pt")
         
         if AI_USE_GPU:
@@ -1630,7 +1630,7 @@ def analyze_ic_with_ai_agent(image, part_number=None):
         # Generate caption/description
         out = AI_MODEL.generate(**inputs, max_length=100)
         description = AI_PROCESSOR.decode(out[0], skip_special_tokens=True)
-        print(f"  📝 AI Description: {description}")
+        print(f"  AI Description: {description}")
         
         # Conditional generation for specific queries
         queries = [
@@ -1811,10 +1811,10 @@ def analyze_ic_with_database(part_number):
     # Try to find exact or partial match
     for key, data in oem_database.items():
         if key.upper() in part_number.upper() or part_number.upper() in key.upper():
-            print(f"  ✓ Found match in local database: {key}")
+            print(f"  Found match in local database: {key}")
             return {'found': True, **data}
     
-    print(f"  ⚠️  Part not found in local database")
+    print(f"  Part not found in local database")
     return {
         'found': False,
         'part_number': part_number,
@@ -1975,7 +1975,7 @@ def correlation_analysis(results, test_image=None):
     print(f"  Status: {status}")
     
     step_time = (time.time() - step_start_time) * 1000
-    print(f"  ⏱️  Processing Time: {step_time:.2f}ms")
+    print(f"  Processing Time: {step_time:.2f}ms")
     
     # Create visualization - summary chart
     if test_image is not None:

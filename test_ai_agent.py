@@ -32,7 +32,7 @@ def test_ai_agent_initialization():
         print(f"   Initialization time: {init_time:.2f}ms")
         return True
     else:
-        print(f"❌ FAIL - AI Agent initialization failed")
+        print(f"FAIL - AI Agent initialization failed")
         print(f"   This is OK - will use fallback database")
         return False
     
@@ -64,9 +64,9 @@ def test_ai_agent_analysis(image_path):
             print(f"❌ FAIL - Could not load image: {image_path}")
             return False
         
-        print(f"✅ Image loaded: {image.shape[1]}x{image.shape[0]} pixels")
+        print(f"Image loaded: {image.shape[1]}x{image.shape[0]} pixels")
     except Exception as e:
-        print(f"❌ FAIL - Error loading image: {str(e)}")
+        print(f"FAIL - Error loading image: {str(e)}")
         return False
     
     # Analyze with AI Agent
@@ -77,7 +77,7 @@ def test_ai_agent_analysis(image_path):
         result = analyze_ic_with_ai_agent(image, part_number=None)
         analysis_time = (time.time() - start_time) * 1000
         
-        print(f"\n✅ Analysis completed in {analysis_time:.2f}ms")
+        print(f"\nAnalysis completed in {analysis_time:.2f}ms")
         print_separator('-')
         print(f"Part Number:     {result.get('part_number', 'N/A')}")
         print(f"Manufacturer:    {result.get('manufacturer', 'N/A')}")
