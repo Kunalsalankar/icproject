@@ -276,6 +276,154 @@ def preprocess_image_if_needed(image, force_preprocess=False):
     return processed, f"Preprocessing applied (contrast: {quality['contrast']:.1f}, sharpness: {quality['sharpness']:.1f})"
 
 # ============================================================================
+# COMPREHENSIVE IMAGE PREPROCESSING MODULE
+# ============================================================================
+
+def preprocess_image_comprehensive(image, target_size=640, save_steps=False):
+    """
+    Comprehensive image preprocessing for IC chip detection with multiple enhancement techniques.
+    
+    Process:
+    1. Resize to fixed size (640x640) - standardizes images from different sources
+    2. Grayscale conversion - reduces data complexity for OCR and feature detection
+    3. Noise removal (bilateral filtering) - preserves edges while removing noise
+    4. CLAHE contrast enhancement - improves low-contrast text visibility
+    5. Adaptive thresholding - optimizes text/feature detection
+    6. Canny edge detection - highlights structural features
+    
+    Args:
+        image: Input BGR image
+        target_size: Target size for resizing (default 640x640)
+        save_steps: Whether to save intermediate visualization images
+    
+    Returns:
+        Dictionary with:
+        - preprocessed: Final preprocessed image (for logo/OCR)
+        - original_resized: Resized original image (for defect/color/texture analysis)
+        - intermediate_steps: Dict with all intermediate images for visualization
+        - metadata: Dict with processing details
+    """
+    print("\n" + "="*70)
+    print("IMAGE PREPROCESSING MODULE - Comprehensive Enhancement")
+    print("="*70)
+    
+    start_time = time.time()
+    
+    # Step 1: Resize image to fixed size
+    print("\n[STEP 1] Resizing image to fixed size...")
+    original_h, original_w = image.shape[:2]
+    aspect_ratio = original_w / original_h
+    
+    # Calculate dimensions to maintain aspect ratio
+    if aspect_ratio > 1:
+        new_w = target_size
+        new_h = int(target_size / aspect_ratio)
+    else:
+        new_h = target_size
+        new_w = int(target_size * aspect_ratio)
+    
+    # Create square canvas and paste resized image
+    canvas = np.ones((target_size, target_size, 3), dtype=np.uint8) * 128  # Gray background
+    y_offset = (target_size - new_h) // 2
+    x_offset = (target_size - new_w) // 2
+    canvas[y_offset:y_offset+new_h, x_offset:x_offset+new_w] = cv2.resize(image, (new_w, new_h))
+    resized_image = canvas.copy()
+    
+    print(f"  Original size: {original_w}x{original_h}")
+    print(f"  Resized to: {target_size}x{target_size}")
+    print(f"  Aspect ratio maintained: {aspect_ratio:.2f}")
+    
+    if save_steps:
+        save_visualization_image(resized_image, "preprocessing", 0, "01_resized")
+    
+    # Step 2: Convert to grayscale
+    print("\n[STEP 2] Converting to grayscale...")
+    gray_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
+    print(f"  Grayscale conversion completed")
+    
+    if save_steps:
+        save_visualization_image(gray_image, "preprocessing", 0, "02_grayscale")
+    
+    # Step 3: Noise removal using bilateral filtering
+    print("\n[STEP 3] Removing noise (bilateral filtering)...")
+    denoised = cv2.bilateralFilter(gray_image, d=9, sigmaColor=75, sigmaSpace=75)
+    print(f"  Bilateral filtering completed")
+    print(f"  Parameters: d=9, sigmaColor=75, sigmaSpace=75")
+    
+    if save_steps:
+        save_visualization_image(denoised, "preprocessing", 0, "03_denoised")
+    
+    # Step 4: CLAHE (Contrast Limited Adaptive Histogram Equalization)
+    print("\n[STEP 4] Enhancing contrast (CLAHE)...")
+    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    contrast_enhanced = clahe.apply(denoised)
+    print(f"  CLAHE parameters: clipLimit=2.0, tileGridSize=(8, 8)")
+    print(f"  Contrast enhancement completed")
+    
+    if save_steps:
+        save_visualization_image(contrast_enhanced, "preprocessing", 0, "04_contrast_enhanced")
+    
+    # Step 5: Adaptive thresholding for OCR optimization
+    print("\n[STEP 5] Adaptive thresholding for OCR...")
+    adaptive_thresh = cv2.adaptiveThreshold(contrast_enhanced, 255, 
+                                           cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+                                           cv2.THRESH_BINARY, 11, 2)
+    print(f"  Adaptive threshold parameters: blockSize=11, C=2")
+    print(f"  Optimal for text extraction")
+    
+    if save_steps:
+        save_visualization_image(adaptive_thresh, "preprocessing", 0, "05_adaptive_threshold")
+    
+    # Step 6: Canny edge detection for geometry/structure analysis
+    print("\n[STEP 6] Edge detection (Canny)...")
+    edges = cv2.Canny(contrast_enhanced, CANNY_LOW_THRESHOLD, CANNY_HIGH_THRESHOLD)
+    print(f"  Canny edge detection: low={CANNY_LOW_THRESHOLD}, high={CANNY_HIGH_THRESHOLD}")
+    print(f"  Detects structural features and IC boundaries")
+    
+    if save_steps:
+        save_visualization_image(edges, "preprocessing", 0, "06_edges")
+    
+    # Final preprocessed image: use contrast-enhanced grayscale for OCR/logo
+    preprocessed_image = contrast_enhanced.copy()
+    
+    # Convert to BGR for consistency with downstream functions
+    preprocessed_bgr = cv2.cvtColor(preprocessed_image, cv2.COLOR_GRAY2BGR)
+    original_resized_bgr = resized_image.copy()
+    
+    processing_time = (time.time() - start_time) * 1000
+    
+    print("\n" + "="*70)
+    print(f"PREPROCESSING COMPLETED - Total time: {processing_time:.2f}ms")
+    print("="*70 + "\n")
+    
+    return {
+        'preprocessed': preprocessed_bgr,  # For logo detection and OCR
+        'original_resized': original_resized_bgr,  # For defect/color/texture analysis
+        'intermediate_steps': {
+            'resized': resized_image,
+            'grayscale': gray_image,
+            'denoised': denoised,
+            'contrast_enhanced': contrast_enhanced,
+            'adaptive_threshold': adaptive_thresh,
+            'edges': edges
+        },
+        'metadata': {
+            'original_size': (original_w, original_h),
+            'target_size': (target_size, target_size),
+            'aspect_ratio': aspect_ratio,
+            'processing_time_ms': processing_time,
+            'techniques_applied': [
+                'Resize to 640x640',
+                'Grayscale conversion',
+                'Bilateral noise filtering',
+                'CLAHE contrast enhancement',
+                'Adaptive thresholding (11x11 blockSize)',
+                'Canny edge detection'
+            ]
+        }
+    }
+
+# ============================================================================
 # STEP 1: LOGO DETECTION
 # ============================================================================
 

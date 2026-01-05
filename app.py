@@ -34,6 +34,7 @@ try:
     # Get the functions we need
     run_complete_7step_verification = verification_module.run_complete_7step_verification
     initialize_ai_agent = verification_module.initialize_ai_agent
+    preprocess_image_comprehensive = verification_module.preprocess_image_comprehensive
     
     # Initialize AI Agent on startup
     print("Initializing AI Agent...")
