@@ -1,15 +1,15 @@
 {
-  "timestamp": "2025-11-14T12:47:13.121125",
+  "timestamp": "2025-11-19T11:18:29.848208",
   "test_image": "test_images/product_to_verify.jpg",
   "reference_image": "reference/golden_product.jpg",
   "verdict": "COUNTERFEIT",
-  "overall_confidence": 0.7087964644234132,
+  "overall_confidence": 0.6890994947264435,
   "pipeline_results": [
     {
       "step": "1. Logo Detection (Template)",
       "status": "FAIL",
       "confidence": 0.3177339249735797,
-      "processing_time_ms": 33.919334411621094,
+      "processing_time_ms": 35.39919853210449,
       "details": {
         "template_match_score": 0.0,
         "motorola_logo_found": true,
@@ -29,7 +29,7 @@
       "step": "3. Text & Serial Number OCR",
       "status": "PASS",
       "confidence": 1.0,
-      "processing_time_ms": 294.3742275238037,
+      "processing_time_ms": 1097.4225997924805,
       "details": {
         "ocr_text": "@) MCTYHC2 ON\n\nFFKI9319",
         "expected_text": null,
@@ -48,7 +48,7 @@
       "step": "5. Surface Defect Detection",
       "status": "FAIL",
       "confidence": 0.4183301991604506,
-      "processing_time_ms": 63.765764236450195,
+      "processing_time_ms": 71.07257843017578,
       "details": {
         "ssim_score": 0.5755321942287227,
         "defect_ratio": 0.2731419660701003,
@@ -60,7 +60,7 @@
       "step": "6. Edge Detection (Canny)",
       "status": "PASS",
       "confidence": 0.10651669795638495,
-      "processing_time_ms": 15.447854995727539,
+      "processing_time_ms": 15.607833862304688,
       "details": {
         "edge_density": 0.02571903280863066,
         "edge_strength": 41.41551463033269,
@@ -77,7 +77,7 @@
       "step": "7. IC Outline/Geometry",
       "status": "FAIL",
       "confidence": 0.8673613293684371,
-      "processing_time_ms": 20.1876163482666,
+      "processing_time_ms": 24.516582489013672,
       "details": {
         "test_size": [
           857,
@@ -100,7 +100,7 @@
       "step": "8. Angle Detection",
       "status": "PASS",
       "confidence": 1.0,
-      "processing_time_ms": 14.489889144897461,
+      "processing_time_ms": 13.013601303100586,
       "details": {
         "lines_detected": 3,
         "avg_angle_deviation": 0.0,
@@ -114,7 +114,7 @@
       "step": "9. Color Surface Verification",
       "status": "PASS",
       "confidence": 1.0,
-      "processing_time_ms": 6.6890716552734375,
+      "processing_time_ms": 8.310556411743164,
       "details": {
         "avg_color_bgr": [
           153,
@@ -134,7 +134,7 @@
       "step": "10. Texture Verification",
       "status": "PASS",
       "confidence": 0.9238333217258857,
-      "processing_time_ms": 21.381139755249023,
+      "processing_time_ms": 24.72233772277832,
       "details": {
         "texture_distance": 0.011425001741117142,
         "texture_pass": true,
@@ -145,7 +145,7 @@
       "step": "10.5 Font Verification",
       "status": "PASS",
       "confidence": 0.8066144637196085,
-      "processing_time_ms": 50.015926361083984,
+      "processing_time_ms": 53.95364761352539,
       "details": {
         "font_similarity": 0.8066144637196085,
         "shape_score": 0.757861852645874,
@@ -159,27 +159,27 @@
     {
       "step": "10.6 AI Agent OEM Verification",
       "status": "PASS",
-      "confidence": 0.7,
-      "processing_time_ms": 18844.327926635742,
+      "confidence": 0.5,
+      "processing_time_ms": 0.0,
       "details": {
         "part_number": "FFKI9319",
         "manufacturer": "motorola",
-        "oem_data_found": true,
+        "oem_data_found": false,
         "oem_part_number": "FFKI9319",
-        "oem_manufacturer": "Texas Instruments",
-        "oem_description": "a close up of a microconnector with a motochrome on it",
+        "oem_manufacturer": "Unknown",
+        "oem_description": "Not found in database",
         "oem_package": "Unknown",
-        "oem_status": "Active",
+        "oem_status": "Unknown",
         "is_obsolete": false,
-        "ai_confidence": 0.7999999999999999,
+        "ai_confidence": 0.0,
         "method": "OCR + Hugging Face AI Agent + Vision-Language Model Analysis"
       }
     },
     {
       "step": "11. Correlation Analysis",
       "status": "FAIL",
-      "confidence": 0.656371171753198,
-      "processing_time_ms": 0.0,
+      "confidence": 0.6397045050865314,
+      "processing_time_ms": 1.371622085571289,
       "details": {
         "total_checks": 10,
         "passed_checks": 7,
@@ -191,7 +191,7 @@
           "1. Logo Detection (Template)",
           "5. Surface Defect Detection"
         ],
-        "weighted_confidence": 0.656371171753198,
+        "weighted_confidence": 0.6397045050865314,
         "correlation_pass": false,
         "method": "Weighted composite analysis"
       }
@@ -199,7 +199,7 @@
     {
       "step": "Final Verdict",
       "status": "FAIL",
-      "confidence": 0.7087964644234132,
+      "confidence": 0.6890994947264435,
       "details": {
         "verdict": "COUNTERFEIT",
         "passed_checks": 7,

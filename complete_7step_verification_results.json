@@ -1,0 +1,229 @@
+{
+  "timestamp": "2026-01-05T23:27:22.073705",
+  "test_image": "test_images/product_to_verify.jpg",
+  "reference_image": "reference/golden_product.jpg",
+  "verdict": "COUNTERFEIT",
+  "overall_confidence": 0.6168929324126097,
+  "pipeline_results": [
+    {
+      "step": "1. Logo Detection (Template)",
+      "status": "FAIL",
+      "confidence": 0.0,
+      "processing_time_ms": 50.887107849121094,
+      "details": {
+        "template_match_score": 0.0,
+        "test_logo_found": true,
+        "test_logo_confidence": 0.3177339249735797,
+        "test_logo_location": [
+          200,
+          162,
+          64,
+          64
+        ],
+        "logo_match_found": true,
+        "logo_match_score": -0.03645841032266617,
+        "template_location": null,
+        "method": "Logo Match: -0.036, Template: 0.000",
+        "threshold": 0.35
+      }
+    },
+    {
+      "step": "2. Text & Serial Number OCR",
+      "status": "PASS",
+      "confidence": 1.0,
+      "processing_time_ms": 1186.9590282440186,
+      "details": {
+        "ocr_text": "@) MCTYHC2 ON\n\nFFKI9319",
+        "expected_text": null,
+        "ocr_confidence": 1.0,
+        "method": "Fast OCR with downsampling"
+      }
+    },
+    {
+      "step": "3. QR/DMC Code Detection",
+      "status": "SKIPPED",
+      "confidence": 1.0,
+      "processing_time_ms": 348.45590591430664,
+      "details": {
+        "message": "QR/DMC Detection are not present in the test to check"
+      }
+    },
+    {
+      "step": "4. Surface Defect Detection",
+      "status": "FAIL",
+      "confidence": 0.28776609711436135,
+      "processing_time_ms": 94.65599060058594,
+      "details": {
+        "ssim_score": 0.5755321942287227,
+        "defect_ratio": 0.2731419660701003,
+        "defect_pixels": 121912,
+        "method": "absdiff + SSIM + threshold"
+      }
+    },
+    {
+      "step": "5. IC Geometry & Alignment",
+      "status": "PASS",
+      "confidence": 0.8169528391624785,
+      "processing_time_ms": 68.62044334411621,
+      "details": {
+        "edge_detection": {
+          "step": "6. Edge Detection (Canny)",
+          "status": "PASS",
+          "confidence": 0.6285951640431533,
+          "processing_time_ms": 22.399187088012695,
+          "details": {
+            "edge_density": 0.02571903280863066,
+            "edge_strength": 41.41551463033269,
+            "edge_pixels": 11362,
+            "total_pixels": 441774,
+            "edge_density_pass": true,
+            "edge_strength_pass": true,
+            "canny_low_threshold": 100,
+            "canny_high_threshold": 200,
+            "method": "Canny edge detection with Sobel gradient analysis"
+          }
+        },
+        "geometry_check": {
+          "step": "7. IC Outline/Geometry",
+          "status": "FAIL",
+          "confidence": 0.8673613293684371,
+          "processing_time_ms": 25.70509910583496,
+          "details": {
+            "test_size": [
+              857,
+              311
+            ],
+            "reference_size": [
+              798,
+              328
+            ],
+            "size_deviation": 0.06288205269270737,
+            "aspect_deviation": 0.13263867063156284,
+            "area_deviation": 0.021573407227866943,
+            "size_pass": false,
+            "aspect_pass": false,
+            "area_pass": true,
+            "method": "contour analysis + bounding rect comparison"
+          }
+        },
+        "angle_detection": {
+          "step": "8. Angle Detection",
+          "status": "PASS",
+          "confidence": 1.0,
+          "processing_time_ms": 15.153884887695312,
+          "details": {
+            "lines_detected": 3,
+            "avg_angle_deviation": 0.0,
+            "max_angle_deviation": 0.0,
+            "angle_tolerance": 2.0,
+            "angle_pass": true,
+            "method": "HoughLinesP + angle deviation analysis"
+          }
+        },
+        "passed_subchecks": 2,
+        "method": "Combined edge detection + geometry + angle analysis"
+      }
+    },
+    {
+      "step": "6. Color & Texture Verification",
+      "status": "PASS",
+      "confidence": 0.9619166608629428,
+      "processing_time_ms": 23.02718162536621,
+      "details": {
+        "color_verification": {
+          "step": "9. Color Surface Verification",
+          "status": "PASS",
+          "confidence": 1.0,
+          "processing_time_ms": 8.461475372314453,
+          "details": {
+            "avg_color_bgr": [
+              153,
+              151,
+              150
+            ],
+            "avg_color_lab": [
+              153,
+              151,
+              150
+            ],
+            "color_difference": 0.0,
+            "color_distance": 0.0,
+            "method": "LAB hist + compareHist"
+          }
+        },
+        "texture_verification": {
+          "step": "10. Texture Verification",
+          "status": "PASS",
+          "confidence": 0.9238333217258857,
+          "processing_time_ms": 14.565706253051758,
+          "details": {
+            "texture_distance": 0.011425001741117142,
+            "texture_pass": true,
+            "method": "Fast histogram + gradient texture analysis"
+          }
+        },
+        "method": "Combined color (LAB/HSV) + texture (histogram + gradient) analysis"
+      }
+    },
+    {
+      "step": "7. Font Verification & Final Correlation",
+      "status": "FAIL",
+      "confidence": 0.6347219973358749,
+      "processing_time_ms": 63.33661079406738,
+      "details": {
+        "font_verification": {
+          "step": "10.5 Font Verification",
+          "status": "PASS",
+          "confidence": 0.8066144637196085,
+          "processing_time_ms": 53.404808044433594,
+          "details": {
+            "font_similarity_score": 0.8066144637196085,
+            "font_similarity": 0.8066144637196085,
+            "shape_score": 0.757861852645874,
+            "spacing_score": 0.7509314478960821,
+            "stroke_score": 0.840682495631617,
+            "edge_score": 0.9863125453226975,
+            "font_pass": true,
+            "method": "Font shape + spacing + stroke width + edge analysis"
+          }
+        },
+        "correlation_analysis": {
+          "step": "11. Correlation Analysis",
+          "status": "FAIL",
+          "confidence": 0.520127019746719,
+          "processing_time_ms": 0.0,
+          "details": {
+            "total_checks": 6,
+            "passed_checks": 4,
+            "failed_checks": 2,
+            "skipped_checks": 1,
+            "error_checks": 0,
+            "pass_rate": 0.6666666666666666,
+            "critical_failed": [
+              "1. Logo Detection (Template)",
+              "4. Surface Defect Detection"
+            ],
+            "weighted_confidence": 0.520127019746719,
+            "correlation_pass": false,
+            "method": "Weighted composite analysis"
+          }
+        },
+        "method": "Font verification + composite correlation analysis"
+      }
+    },
+    {
+      "step": "Final Verdict",
+      "status": "FAIL",
+      "confidence": 0.6168929324126097,
+      "details": {
+        "verdict": "COUNTERFEIT",
+        "passed_checks": 3,
+        "failed_checks": 3,
+        "total_checks": 6,
+        "pass_rate": 0.5,
+        "critical_failed": [
+          "1. Logo Detection (Template)",
+          "4. Surface Defect Detection"
+        ],
+        "max_allowed_failures": 1,
+        "is_high_confidence": 
