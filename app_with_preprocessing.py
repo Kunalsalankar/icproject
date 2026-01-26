@@ -494,7 +494,7 @@ css_style = """
 """
 
 # Build Gradio interface with tabs
-with gr.Blocks(theme=custom_theme, css=css_style, title="IC Counterfeit Detection") as demo:
+with gr.Blocks(title="IC Counterfeit Detection") as demo:
     # Header
     gr.HTML("""
     <div class="header-section">
